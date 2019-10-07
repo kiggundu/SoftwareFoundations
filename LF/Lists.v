@@ -493,13 +493,18 @@ Example test_remove_all4:  count 5 (remove_all 5 [2;1;5;4;5;1;4;5;1;4]) = 0.
 Proof. reflexivity. Qed.
 
 
-Fixpoint subset (s1:bag) (s2:bag) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint subset (s1:bag) (s2:bag) : bool :=
+  match s1 with
+  | nil => true
+  | h :: t => if (member h s2) then subset t (remove_one h s2) else false 
+  end.
 
 Example test_subset1:              subset [1;2] [2;1;4;1] = true.
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
+
 Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars, standard, recommended (bag_theorem)  
@@ -517,6 +522,73 @@ Proof.
   ...
 Qed.
 *)
+
+
+Theorem bag_theorem: forall (n : nat), count 0 (add 0 nil) = 1.
+Proof.
+  intros [].
+  - simpl. reflexivity.
+  - simpl. reflexivity.
+Qed.
+
+(* trying something more challenging than a nil bag *)
+(*
+Theorem count_dissociate: forall (n: nat) (b : bag), (count n b) = (count n b1 + count n b2).
+Proof.
+  *)
+
+Theorem count_add_to_empty: forall (n : nat), count n [] = O.
+Proof.
+  intros. simpl. reflexivity.
+Qed.
+
+
+Theorem add_n_to_empty: forall (n : nat), count n (add n []) = 1.
+Proof.
+  intros. 
+  induction n.
+  - simpl. reflexivity.
+  - rewrite <- IHn. simpl. reflexivity.
+Qed.
+
+(*
+Theorem count_unfold: forall (n : nat) (nl : natlist),forall (n : nat) (nl : natlist),  count n ([n] ++ nl) = count n nl + 1.
+Proof.
+  intros. 
+  induction nl0.
+  - simpl. 
+*)
+
+Theorem count_expand: forall(n : nat) (nl : natlist), count n (add n nl) = count n nl + 1. 
+Proof.
+  intros.  
+  induction nl.
+  - rewrite add_n_to_empty. reflexivity. 
+  - unfold add. simpl. 
+Admitted. (* TODO: need to come back to this *)
+
+Theorem count_addition: forall (n : nat) (b : bag), count n (add n b) =  (count n b) + 1.
+Proof.
+  intros. 
+  induction n.
+  - simpl. rewrite PeanoNat.Nat.add_comm. reflexivity.
+  - { induction b. 
+      - rewrite add_n_to_empty. rewrite count_add_to_empty. reflexivity.
+      - rewrite count_expand. reflexivity.
+    }
+Qed.
+
+Theorem bag_theorem3: forall (n : nat) (b : bag), count n (add n b) = S(count n b).
+Proof. 
+  intros.
+  { induction n.
+  - simpl. reflexivity.
+  - {induction b.
+      - rewrite count_add_to_empty.  rewrite add_n_to_empty. reflexivity.
+      - rewrite count_addition. rewrite PeanoNat.Nat.add_comm. reflexivity. 
+    }
+  }
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_bag_theorem : option (nat*string) := None.
