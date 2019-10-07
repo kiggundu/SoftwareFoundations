@@ -1,1 +1,4 @@
 *-answers
+*.aux
+*.glob
+*.vo
