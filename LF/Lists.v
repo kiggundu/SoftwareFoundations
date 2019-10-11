@@ -916,17 +916,31 @@ Proof.
 Theorem app_nil_r : forall l : natlist,
   l ++ [] = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intro l. simpl. 
+  induction l.
+  - reflexivity.
+  - simpl. rewrite IHl. reflexivity.
+Qed.
 
 Theorem rev_app_distr: forall l1 l2 : natlist,
   rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. 
+  - { induction l1 as [|n l1' IHl1'].
+      - simpl. rewrite app_nil_r. reflexivity.
+      - simpl. rewrite IHl1'. rewrite app_assoc. reflexivity.
+  }
+  Qed.
 
 Theorem rev_involutive : forall l : natlist,
   rev (rev l) = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  { induction l as [|l' n IHl'].
+    - simpl. reflexivity.
+    - simpl. rewrite rev_app_distr. rewrite IHl'. reflexivity.
+  }
+Qed.
 
 (** There is a short solution to the next one.  If you find yourself
     getting tangled up, step back and try to look for a simpler
