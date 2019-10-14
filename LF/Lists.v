@@ -296,8 +296,9 @@ Proof. reflexivity.  Qed.
 Fixpoint nonzeros (l:natlist) : natlist :=
   match l with
   | nil => nil
-  | h :: t => if (eqb O h) then nonzeros t else h :: nonzeros t 
-    end.
+  | O :: t => nonzeros t
+  | h :: t =>  h :: nonzeros t 
+  end.
 
 Example test_nonzeros:
   nonzeros [0;1;0;2;3;0;0] = [1;2;3].
@@ -949,15 +950,21 @@ Qed.
 Theorem app_assoc4 : forall l1 l2 l3 l4 : natlist,
   l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
 Proof.
-  (* FILL IN HERE *) Admitted.
-
-(** An exercise about your implementation of [nonzeros]: *)
+  intros.
+  rewrite app_assoc. rewrite app_assoc. reflexivity. 
+Qed.
 
 Lemma nonzeros_app : forall l1 l2 : natlist,
   nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros l1 l2. 
+  induction l1 as [| n l1' IHl1'].
+  - reflexivity.
+  - { induction n as [| n' IHn'].
+    - simpl. rewrite -> IHl1'. reflexivity. 
+    - simpl. rewrite IHl1'. reflexivity.
+  }
+Qed.
 
 (** **** Exercise: 2 stars, standard (eqblist)  
 
