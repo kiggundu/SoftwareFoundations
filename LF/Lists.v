@@ -972,25 +972,33 @@ Qed.
     lists of numbers for equality.  Prove that [eqblist l l]
     yields [true] for every list [l]. *)
 
-Fixpoint eqblist (l1 l2 : natlist) : bool
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint eqblist (l1 l2 : natlist) : bool :=
+  match l1, l2 with
+  | nil, nil => true
+  | _, nil => false
+  | nil, _ => false
+  | h1 :: t1, h2 :: t2 => if(eqb h1 h2) then eqblist t1 t2 else false end.
 
 Example test_eqblist1 :
   (eqblist nil nil = true).
- (* FILL IN HERE *) Admitted.
+reflexivity. Qed.
 
 Example test_eqblist2 :
   eqblist [1;2;3] [1;2;3] = true.
-(* FILL IN HERE *) Admitted.
+reflexivity. Qed.
 
 Example test_eqblist3 :
   eqblist [1;2;3] [1;2;4] = false.
- (* FILL IN HERE *) Admitted.
+reflexivity. Qed.
 
 Theorem eqblist_refl : forall l:natlist,
   true = eqblist l l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l.
+  - simpl. reflexivity.
+  - simpl. rewrite <- IHl. simpl. rewrite <- eqb_refl. reflexivity.
+Qed.
 (** [] *)
 
 (* ================================================================= *)
@@ -1003,7 +1011,10 @@ Proof.
 Theorem count_member_nonzero : forall (s : bag),
   1 <=? (count 1 (1 :: s)) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  simpl. reflexivity.
+Qed.
+
 (** [] *)
 
 (** The following lemma about [leb] might help you in the next exercise. *)
@@ -1023,7 +1034,15 @@ Proof.
 Theorem remove_does_not_increase_count: forall (s : bag),
   (count 0 (remove_one 0 s)) <=? (count 0 s) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. simpl.
+  induction s.
+  - simpl. reflexivity.
+  - { induction n as [|n' IHn']. 
+      - simpl. rewrite leb_n_Sn. reflexivity.
+      - simpl. rewrite IHs. reflexivity.
+  }
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, standard, optional (bag_count_sum)  

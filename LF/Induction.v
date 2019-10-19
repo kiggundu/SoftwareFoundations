@@ -741,7 +741,18 @@ Qed.
     definitions to make the property easier to prove, feel free to
     do so! *)
 
-(* FILL IN HERE *)
+Theorem bin_to_nat_pres_incr: forall(n : nat)(b : bin), bin_to_nat(incr b) = S(bin_to_nat b).
+Proof.
+  intros.
+  induction b as [|b' IHb'|b'' IHb''].
+  - simpl. reflexivity.
+- simpl. reflexivity.
+- simpl. rewrite IHb''. rewrite <- plus_n_O. rewrite <- plus_n_O.
+  { assert (S (bin_to_nat b'') = bin_to_nat b'' + 1). 
+    - rewrite <- plus_1_l. rewrite plus_comm. reflexivity.
+    - rewrite <- plus_1_l. simpl. rewrite <- plus_n_Sm. reflexivity.
+  }
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_commute : option (nat*string) := None.
@@ -756,8 +767,40 @@ Definition manual_grade_for_binary_commute : option (nat*string) := None.
     (a) First, write a function to convert natural numbers to binary
         numbers. *)
 
-Fixpoint nat_to_bin (n:nat) : bin
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint nat_to_bin (n:nat) : bin :=
+  match n with
+  | O => Z
+  | S n' => incr(nat_to_bin(n'))
+  end.
+
+Example zero_to_bin: nat_to_bin 0 = Z.
+Proof. simpl. reflexivity. Qed.
+
+Example one_to_bin: nat_to_bin 1 = B Z.
+Proof. simpl. reflexivity. Qed.
+
+Example two_to_bin: nat_to_bin 2 = A (B Z).
+Proof. simpl. reflexivity. Qed.
+
+Example three_to_bin: nat_to_bin 3 = B (B Z).
+Proof. simpl. reflexivity. Qed.
+
+Example four_to_bin: nat_to_bin 4 = A (A (B Z)).
+Proof. simpl. reflexivity. Qed.
+
+Example five_to_bin: nat_to_bin 5 = B (A (B Z)).
+Proof. simpl. reflexivity. Qed.
+   
+Example six_to_bin: nat_to_bin 6 = A (B (B Z)).
+Proof. simpl. reflexivity. Qed.
+   
+Example seven_to_bin: nat_to_bin 7 = B (B (B Z)).
+Proof. simpl. reflexivity. Qed.
+   
+Example eight_to_bin: nat_to_bin 8 = A (A (A (B Z))).
+Proof. simpl. reflexivity. Qed.
+   
+
 
 (** Prove that, if we start with any [nat], convert it to binary, and
     convert it back, we get the same [nat] we started with.  (Hint: If
@@ -765,9 +808,24 @@ Fixpoint nat_to_bin (n:nat) : bin
     may need to prove a subsidiary lemma showing how such functions
     relate to [nat_to_bin].) *)
 
+
+Lemma bin_incr_compat: forall(b:bin), bin_to_nat(incr b) = S (bin_to_nat b).
+Proof.
+  intros. 
+  induction b.
+  - simpl. reflexivity.
+  - simpl. reflexivity.
+  - simpl. rewrite <- plus_n_O. rewrite <- plus_n_O. 
+    rewrite IHb. rewrite <- plus_n_1.  simpl. rewrite <- plus_n_Sm. reflexivity.
+Qed.
+
 Theorem nat_bin_nat : forall n, bin_to_nat (nat_to_bin n) = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n as [|n' IHn'].
+  - simpl. reflexivity.
+  - simpl. rewrite bin_incr_compat. rewrite IHn'. reflexivity.
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_inverse_a : option (nat*string) := None.
