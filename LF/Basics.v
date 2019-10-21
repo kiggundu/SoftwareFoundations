@@ -1,6 +1,6 @@
 (** * Basics: Functional Programming in Coq *)
 (*
-Require Export Basics.
+From LF Require Export Basics.
 *)
 (* REMINDER:
 
