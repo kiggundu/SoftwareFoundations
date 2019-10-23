@@ -1,7 +1,7 @@
 (** * Lists: Working with Structured Data *)
 Search plus.
 
-From LF Require Export Induction.
+Require Export Induction.
 Module NatList.
 
 (* ################################################################# *)

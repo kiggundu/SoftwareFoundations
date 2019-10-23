@@ -6,7 +6,7 @@ Add LoadPath "/Users/abrahamkiggundu/workspace/coq-stuff/software foubations/lf"
 (** Before getting started, we need to import all of our
     definitions from the previous chapter: *)
 
-From LF Require Export Basics.
+Require Export Basics.
 
 (** For the [Require Export] to work, Coq needs to be able to
     find a compiled version of [Basics.v], called [Basics.vo], in a directory
