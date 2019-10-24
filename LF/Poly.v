@@ -5,7 +5,7 @@
 
 (* Suppress some annoying warnings from Coq: *)
 Set Warnings "-notation-overridden,-parsing".
-From LF Require Export Lists.
+Require Export Lists.
 
 (* ################################################################# *)
 (** * Polymorphism *)
@@ -157,12 +157,12 @@ Inductive grumble (X:Type) : Type :=
 
 (** Which of the following are well-typed elements of [grumble X] for
     some type [X]?  (Add YES or NO to each line.)
-      - [d (b a 5)]
-      - [d mumble (b a 5)]
-      - [d bool (b a 5)]
-      - [e bool true]
-      - [e mumble (b c 0)]
-      - [e bool (b c 0)]
+      - [d (b a 5)] No
+      - [d mumble (b a 5)] Yes though the constructors are identical
+      - [d bool (b a 5)] Yes
+      - [e bool true] No
+      - [e mumble (b c 0)] Yes
+      - [e bool (b c 0)] Yes
       - [c]  *)
 (* FILL IN HERE *)
 End MumbleGrumble.
@@ -246,7 +246,7 @@ Fixpoint repeat'' X x count : list X :=
   | 0        => nil _
   | S count' => cons _ x (repeat'' _ x count')
   end.
-
+ 
 (** In this instance, we don't save much by writing [_] instead of
     [X].  But in many cases the difference in both keystrokes and
     readability is nontrivial.  For example, suppose we want to write
@@ -403,20 +403,44 @@ Definition list123''' := [1; 2; 3].
     Here are a few simple exercises, just like ones in the [Lists]
     chapter, for practice with polymorphism.  Complete the proofs below. *)
 
+Lemma list_comm: forall (X: Type)(l: list X), l ++ [] = [] ++ l.
+Proof.
+  simpl. 
+  induction l as [|l1' l1'' IHl1']. 
+  - simpl. reflexivity.
+  - simpl. rewrite IHl1'. reflexivity.
+Qed.  
+
 Theorem app_nil_r : forall (X:Type), forall l:list X,
   l ++ [] = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. simpl. 
+  assert (l ++ [] = [] ++ l) as H_list_comm.
+  - simpl. 
+    { induction l as [|l1' l1'' IHl1']. 
+      - simpl. reflexivity.
+      - simpl. rewrite IHl1'. reflexivity.
+    }
+  - rewrite list_comm. reflexivity.
+Qed.
 
 Theorem app_assoc : forall A (l m n:list A),
   l ++ m ++ n = (l ++ m) ++ n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l as [|l' l'' IHl'].
+  - reflexivity. 
+  - simpl. rewrite IHl'. reflexivity.
+Qed.    
 
 Lemma app_length : forall (X:Type) (l1 l2 : list X),
   length (l1 ++ l2) = length l1 + length l2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l1 as [|t l1' IHl1'].
+  - simpl. reflexivity.
+  - simpl. rewrite IHl1'. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, standard, optional (more_poly_exercises)  
@@ -426,12 +450,20 @@ Proof.
 Theorem rev_app_distr: forall X (l1 l2 : list X),
   rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l1 as [|x l1' IHl1'].
+  - simpl. rewrite list_comm. simpl. reflexivity.
+  - simpl. rewrite IHl1'. rewrite app_assoc. reflexivity.
+Qed.
 
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction l as [|x l' IHl'].
+  - simpl. reflexivity.
+  - simpl. rewrite rev_app_distr. simpl. rewrite IHl'. reflexivity.
+Qed.
 (** [] *)
 
 (* ================================================================= *)
