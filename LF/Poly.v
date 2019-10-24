@@ -465,7 +465,7 @@ Proof.
   - simpl. rewrite rev_app_distr. simpl. rewrite IHl'. reflexivity.
 Qed.
 (** [] *)
-
+ 
 (* ================================================================= *)
 (** ** Polymorphic Pairs *)
 
@@ -523,6 +523,7 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
   | x :: tx, y :: ty => (x, y) :: (combine tx ty)
   end.
 
+Compute (combine [1;2] [false;false;true;true]).
 (** **** Exercise: 1 star, standard, optional (combine_checks)  
 
     Try answering the following questions on paper and
@@ -547,13 +548,15 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     given unit test. *)
 
 Fixpoint split {X Y : Type} (l : list (X*Y))
-               : (list X) * (list Y)
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+               : (list X) * (list Y) :=
+  match l with
+  | [] => ([], [])
+  | (l, r)::t => (l::fst(split t), r::snd(split t))
+  end.
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
-Proof.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (* ================================================================= *)
