@@ -1,0 +1,13 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+at	Lists.v	/^    function at level 50,$/;"	f	language:Verilog
+being	Poly.v	/^    function being applied, the types of the other arguments, and the$/;"	f	language:Verilog
+from	Poly.v	/^    function from [Type]s to [Type]s.  For any particular type [X],$/;"	f	language:Verilog
+has	Basics.v	/^    function [f] has the property that [f x = negb x]. *)$/;"	f	language:Verilog
+on	Basics.v	/^    function on some particular inputs.  The proofs of these claims$/;"	f	language:Verilog
+so	Basics.v	/^    module so that it does not interfere with the one from the$/;"	m	language:Verilog
+which	Basics.v	/^    function which tests a nybble to see if all its bits are O.$/;"	f	language:Verilog
